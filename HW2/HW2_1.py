@@ -46,3 +46,16 @@ def parse_response_ensemble(resp: dict):
         output[key] = {'organism': species, 'gene_info': gene, 'canonical_transcript': canonical_transcript, 'type': type_, 'biotype': biotype}
         
     return output
+
+
+def get_and_parse(ids: list):
+    
+    if re.fullmatch('ENS[A-Z]+[0-9]{11}', ids[0]):
+        resp = get_ensemble(ids)
+        return parse_response_ensemble(resp)
+    
+    elif re.fullmatch('[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}', ids[0]):
+        resp = get_uniport(ids)
+        return parse_response_uniprot(resp)
+    else:
+        raise TypeError('Passed ids do not match neither ensemble nor uniport id pattern') 
