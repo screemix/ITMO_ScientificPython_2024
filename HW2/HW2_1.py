@@ -3,7 +3,7 @@ import json
 import re
 
 
-def get_uniport(ids: list):
+def get_uniprot(ids: list):
     return requests.get("https://rest.uniprot.org/uniprotkb/accessions", params={'accessions': ids})
 
 
@@ -55,7 +55,7 @@ def get_and_parse(ids: list):
         return parse_response_ensemble(resp)
     
     elif re.fullmatch('[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}', ids[0]):
-        resp = get_uniport(ids)
+        resp = get_uniprot(ids)
         return parse_response_uniprot(resp)
     else:
-        raise TypeError('Passed ids do not match neither ensemble nor uniport id pattern') 
+        raise TypeError('Passed ids do not match neither ensemble nor uniprot id pattern') 
