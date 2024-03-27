@@ -50,7 +50,7 @@ def parse_response_ensemble(resp: dict):
 
 def get_and_parse(ids: list):
     
-    if re.fullmatch('ENS[A-Z]+[0-9]{11}', ids[0]):
+    if re.fullmatch('ENS[A-Z]{3}[A-Z]{1,2}[0-9]{11}', ids[0]):
         resp = get_ensemble(ids)
         return parse_response_ensemble(resp)
     
