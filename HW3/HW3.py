@@ -20,17 +20,18 @@ class IncreaseSpeed():
 
 class DecreaseSpeed():
 
-  def __init__(self, current_speed: int):
+  def __init__(self, current_speed: int, min_speed: int):
     self.current_speed = current_speed
+    self.min_speed = min_speed
 
   def __iter__(self):
     return self
   
   def __next__(self):
-    if self.current_speed == 0:
+    if self.current_speed == self.min_speed:
       raise StopIteration
     else: 
-        self.current_speed = max(self.current_speed - 10, 0)
+        self.current_speed = max(self.current_speed - 10, self.min_speed)
     return self.current_speed
 
 
@@ -52,14 +53,18 @@ class Car():
 
         if isinstance(upper_border, int):
             speed_iterator = IncreaseSpeed(self.current_speed, min(upper_border, self.max_speed))
-            for step in iter(speed_iterator):
-    
-                self.current_speed = step
-                print("Increasing speed, current speed is {}...".format(step))
 
-        elif self.current_speed < upper_border < self.max_speed:
+            for step in iter(speed_iterator):
+                print("Increasing speed, current speed is {}...".format(self.current_speed))
+                self.current_speed = step
+                
+            
+            print("Increased speed, current speed is {}".format(self.current_speed))
+
+        elif self.current_speed < self.max_speed:
             speed_iterator = IncreaseSpeed(self.current_speed, self.max_speed)
             self.current_speed = next(speed_iterator)
+            print("Increased speed, current speed is {}...".format(self.current_speed))
 
         return self.current_speed
             
@@ -67,16 +72,19 @@ class Car():
 
     def brake(self, lower_border=None):
 
-        speed_iterator = DecreaseSpeed(self.current_speed)
-
         if isinstance(lower_border, int):
+            speed_iterator = DecreaseSpeed(self.current_speed, max(lower_border, 0))
 
             for step in iter(speed_iterator):
+                print("Decreasing speed, current speed is {}...".format(self.current_speed))
                 self.current_speed = step
-                print("Decreasing speed, current speed is {}...".format(step))
+            
+            print("Decreased speed, current speed is {}".format(self.current_speed))
                 
-        elif 0 < lower_border < self.current_speed:
+        elif 0 < self.current_speed:
+            speed_iterator = DecreaseSpeed(self.current_speed, 0)
             self.current_speed = next(speed_iterator)
+            print("Decreased speed, current speed is {}...".format(self.current_speed))
 
         return self.current_speed
 
